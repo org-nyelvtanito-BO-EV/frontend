@@ -4,11 +4,12 @@ import { myAxios } from "./MyAxios";
 export const ApiContext = createContext("");
 
 export const ApiProvider = ({ children }) => {
+  const [valaszok, setValaszok] = useState([]);
 
   const getAdat = async (vegpont) => {
     try {
       const response = await myAxios.get(vegpont);
-      setTermekLista(response.data);
+      setValaszok(response.data);
     } catch (err) {
       console.log("Hiba történt az adatok lekérésekor");
     } finally {
@@ -18,6 +19,11 @@ export const ApiProvider = ({ children }) => {
   /* asszinkron hívások kezelése useEffect hook */
   useEffect(() => {
     getAdat("/answers");
-    getAdat("/excercises");
   }, []);
+
+  return (
+    <ApiContext.Provider value={{ valaszok }}>
+      {children}
+    </ApiContext.Provider>
+  );
 };
