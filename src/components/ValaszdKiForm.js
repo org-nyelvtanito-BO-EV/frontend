@@ -9,8 +9,9 @@ function ValaszdKiForm(props) {
   let reszek = mondat.split("_");
   const {valaszok, setValaszok, getAdat} = useContext(ApiContext)
   useEffect(() => {
-    getAdat(`answers-for-spec-exercise-param/${props.elem.exercise_id}`, setValaszok);
+    getAdat(`exercises-with-answers/${props.elem.exercise_id}`, setValaszok);
   }, []);
+  console.log(props.elem.exercise_id)
   return (
     <div>
       <Form>
