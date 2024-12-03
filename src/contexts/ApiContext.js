@@ -4,25 +4,25 @@ import { myAxios } from "./MyAxios";
 export const ApiContext = createContext("");
 
 export const ApiProvider = ({ children }) => {
+  const [kerdesek, setKerdesek] = useState([]);
   const [valaszok, setValaszok] = useState([]);
 
-  const getAdat = async (vegpont) => {
+  const getAdat = async (vegpont, asyFgv) => {
     try {
       const response = await myAxios.get(vegpont);
-      setValaszok(response.data);
+      asyFgv([...response.data]);
     } catch (err) {
-      console.log("Hiba történt az adatok lekérésekor");
-    } finally {
+      console.log("Hiba");
     }
   };
 
-  /* asszinkron hívások kezelése useEffect hook */
+  //aszinkron hivások kezelése useEffect hook
   useEffect(() => {
-    getAdat("/answers");
+    getAdat("/exercises", setKerdesek);
   }, []);
 
   return (
-    <ApiContext.Provider value={{ valaszok }}>
+    <ApiContext.Provider value={{ kerdesek, valaszok, getAdat, setValaszok }}>
       {children}
     </ApiContext.Provider>
   );

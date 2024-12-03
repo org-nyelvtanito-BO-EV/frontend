@@ -1,27 +1,38 @@
 import Button from "react-bootstrap/Button";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Col, Container, Form, Row } from "react-bootstrap";
+import { ApiContext } from "../contexts/ApiContext";
+import ValaszOption from "./ValaszOption";
 
-function ValaszdKiForm() {
+function ValaszdKiForm(props) {
+  const mondat = props.elem.mondat;
+  let reszek = mondat.split("_");
+  const {valaszok, setValaszok, getAdat} = useContext(ApiContext)
+  useEffect(() => {
+    getAdat(`answers-for-spec-exercise-param/${props.elem.exercise_id}`, setValaszok);
+  }, []);
   return (
     <div>
       <Form>
         <Container className="w-50 gap-4">
           <Row>
             <Col>
-              <p className="m-elso text-end">aaaaaaaaaa</p>
+              <p className="m-elso text-end">{reszek[0]}</p>
             </Col>
             <Col>
               <Form.Select>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                {
+                valaszok.map(
+                    (elem,i)=>{
+                        return <ValaszOption elem={elem} key={i}/>
+                    }
+                  )
+                }
               </Form.Select>
             </Col>
             <Col>
               <p className="m-masodik text-start">
-                aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                {reszek[1]} ({props.elem.alap})
               </p>
             </Col>
           </Row>
